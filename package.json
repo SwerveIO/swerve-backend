@@ -1,0 +1,16 @@
+{
+  "name": "swerve-backend",
+  "version": "0.0.1",
+  "description": "Swerve backend. Swerve",
+  "main": "index.js",
+  "author": "Swerve",
+  "license": "ISC, swerve",
+  "dependencies": {
+    "koa": "^1.1.2",
+    "koa-bodyparser": "^2.0.1",
+    "koa-generic-session": "^1.10.1",
+    "koa-passport": "^1.2.0",
+    "mysql": "^2.10.0",
+    "rethinkdb": "^2.2.1"
+  }
+}
