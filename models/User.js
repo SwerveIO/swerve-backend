@@ -44,6 +44,19 @@ export function findUserBy(property, value) {
 	});
 };
 
+export function findById(value) {
+	return co(function* findUserByCoroutine() {
+		let result = yield runQuery(
+			r.db('swerve').table('users')
+				.get(value)
+		);
+
+		return result[0];
+	}, function errorCatch(err) {
+		throw err;
+	});
+};
+
 export function createUser(user) {
 	return co(function* createUserCoroutine() {
 		return yield runQuery(r.db('swerve').table('users').insert([

@@ -7,6 +7,7 @@ import session from 'koa-session';
 import FacebookStrategy from './auth/passport-facebook';
 import TwitterStrategy from './auth/passport-twitter';
 import RedditStrategy from './auth/passport-reddit';
+import JwtStrategy from './auth/passport-jwt';
 
 import User from './models/User';
 
@@ -25,6 +26,7 @@ passport.deserializeUser(function deserialize(user, done) {
 passport.use(FacebookStrategy);
 passport.use(TwitterStrategy);
 passport.use(RedditStrategy);
+passport.use(JwtStrategy);
 
 // Proxy is allowed.
 app.proxy = true;
