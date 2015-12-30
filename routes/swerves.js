@@ -50,5 +50,11 @@ export default function(routes) {
 		}
 
 		yield swerveOnSwerve(this.session.passport.user, swerve, this.request.body.swerve);
+
+		this.response.status = 200;
+		this.response.body = {
+			type: 'success',
+			message: 'Swerve successfully swerved. Stay chill.'
+		};
 	});
 }
