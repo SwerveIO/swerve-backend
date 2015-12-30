@@ -2,34 +2,7 @@
 
 import r from 'rethinkdb';
 import co from 'co';
-
-let connection = null;
-r.connect({ host: 'localhost', port: 28015 }, function connectedToRethink(err, conn) {
-	if(err) throw err;
-
-	connection = conn;
-});
-
-function runQuery(query) {
-	return co(function* runQueryCoroutine() {
-		let cursor = yield new Promise(function runQueryPromise(resolve, reject) {
-			query.run(connection, function(err, cursor) {
-				if(err) reject(cursor);
-				resolve(cursor);
-			});
-		});
-
-		return yield new Promise(function runQueryPromise(resolve, reject) {
-			cursor.toArray(function arrayCallback(err, result) {
-				if(err) reject(err);
-
-				resolve(result)
-			});
-		});
-	}, function errorCatch(err) {
-		throw err;
-	});
-}
+import runQuery, { runInsertQuery } from '../helpers/runQuery';
 
 export function findUserBy(property, value) {
 	return co(function* findUserByCoroutine() {
@@ -46,21 +19,29 @@ export function findUserBy(property, value) {
 
 export function findById(value) {
 	return co(function* findUserByCoroutine() {
+
 		let result = yield runQuery(
 			r.db('swerve').table('users')
 				.get(value)
 		);
 
-		return result[0];
+		return result;
 	}, function errorCatch(err) {
 		throw err;
 	});
 };
 
 export function createUser(user) {
+	user.mySwerves = [];
+	user.theirSwerves = [];
+
 	return co(function* createUserCoroutine() {
-		return yield runQuery(r.db('swerve').table('users').insert([
+		let insert = yield runInsertQuery(r.db('swerve').table('users').insert([
 			user
 		]));
+
+		return yield runQuery(
+			r.db('swerve').table('users').get(insert.generated_keys[0])
+		);
 	});
 }

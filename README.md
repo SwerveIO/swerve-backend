@@ -26,16 +26,17 @@ RethinkDB, swerve!
 {
 	"id": "XXXX-XXXX-XXXXXX",
 	"message": "text",
+	"date": "JSON DATE Object",
 
 	"swerves": [
 		{
 			"swerve": [ ...emojis... ],
-			"user_id": "XXXX",
+			"userId": "XXXX",
 			"date": "JSON DATE Object"
 		},
 		{
 			"swerve": [ ...emojis... ],
-			"user_id": "XXXX",
+			"userId": "XXXX",
 			"date": "JSON DATE Object"
 		}
 	]
@@ -48,11 +49,11 @@ RethinkDB, swerve!
 	"id": "OAUTH GENERATED ID",
 	"username": "Swerve User",
 
-	"my_swerves": [
+	"mySwerves": [
 		"id", "id2", "id3"
 	],
 
-	"their_swerves": [
+	"theirSwerves": [
 		"id", "id2", "id3"
 	]
 }
