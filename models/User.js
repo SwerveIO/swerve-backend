@@ -34,6 +34,7 @@ export function findById(value) {
 export function createUser(user) {
 	user.mySwerves = [];
 	user.theirSwerves = [];
+	user.role = 'swerver';
 
 	return co(function* createUserCoroutine() {
 		let insert = yield runInsertQuery(r.db('swerve').table('users').insert([
