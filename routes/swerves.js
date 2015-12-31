@@ -17,8 +17,6 @@ export default function(routes) {
 			emojis: this.request.body.emojis
 		};
 
-		console.log(swerve);
-
 		yield createSwerve(this.session.passport.user, swerve);
 
 		this.response.status = 200;

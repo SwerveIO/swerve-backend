@@ -51,6 +51,7 @@ export function swerveOnSwerve(user, theirSwerve, swerve) {
 					userId: user.id,
 					date: new Date().toJSON()
 				})
+			})
 		);
 
 		yield runQuery(

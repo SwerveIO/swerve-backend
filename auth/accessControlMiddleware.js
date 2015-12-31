@@ -9,7 +9,7 @@ export function accessControlMiddleware(rolesPermitted) {
 			this.response.message = {
 				type: 'unauthorized',
 				message: 'That is a forbidden action. Swerve.'
-			}
+			};
 		}
 	};
 }
