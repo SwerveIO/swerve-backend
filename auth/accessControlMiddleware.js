@@ -6,7 +6,7 @@ export function accessControlMiddleware(rolesPermitted) {
 			yield next;
 		} else {
 			this.response.status = 401;
-			this.response.message = {
+			this.response.body = {
 				type: 'unauthorized',
 				message: 'That is a forbidden action. Swerve.'
 			};
