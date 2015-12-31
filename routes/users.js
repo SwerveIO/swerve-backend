@@ -16,12 +16,15 @@ export default function(routes) {
 	);
 
 	routes.put('/user/:id', passport.authenticate('jwt'), function* userUpdate() {
+		console.log(this.session.passport.user.id, this.params.id);
 		if(this.session.passport.user.id !== this.params.id && this.session.passport.user.role !== 'admin') {
 			this.response.status = 401;
 			this.response.body = {
 				type: 'unauthorized',
 				message: 'That is a forbidden action. Swerve.'
 			};
+
+			return;
 		}
 
 		let username = this.request.body.username;
