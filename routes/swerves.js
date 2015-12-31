@@ -1,6 +1,6 @@
 "use strict";
 import { passport } from '../auth';
-import { fetchMostRecentSwerves, createSwerve, swerveOnSwerve } from '../models/Swerve';
+import { fetchMostRecentSwerves, createSwerve, swerveOnSwerve, fetchSwerveById } from '../models/Swerve';
 
 export default function(routes) {
 	// Most recent Swerves.

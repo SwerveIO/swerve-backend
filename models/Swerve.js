@@ -60,3 +60,11 @@ export function swerveOnSwerve(user, theirSwerve, swerve) {
 		)
 	});
 }
+
+export function fetchSwerveById(id) {
+	return co(function* coRoutine() {
+		return yield runQuery(
+			r.db('swerve').table('swerves').get(id)
+		);
+	});
+}
