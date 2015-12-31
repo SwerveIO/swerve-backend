@@ -16,36 +16,36 @@ export default function(routes) {
 	);
 
 	routes.put('/user/:id', passport.authenticate('jwt'), function* userUpdate() {
-		if(this.session.user.id !== this.params.id && this.session.user.role !== 'admin') {
+		if(this.session.passport.user.id !== this.params.id && this.session.passport.user.role !== 'admin') {
 			this.response.status = 401;
-			this.response.message = {
+			this.response.body = {
 				type: 'unauthorized',
 				message: 'That is a forbidden action. Swerve.'
 			};
 		}
 
 		let username = this.request.body.username;
-		let emailAddress = this.request.body.email;
+		let email = this.request.body.email;
 
 		yield updateUser(this.params.id, {
 			username,
-			emailAddress
+			email
 		});
 
 		this.response.status = 201;
-		this.response.message = {
+		this.response.body = {
 			type: 'success',
 			message: 'User successfully updated.'
 		};
 	});
 
 	routes.delete('/user/:id',
-		passport.authenticate('jwt'), accessControlMiddleware([ 'admin' ],
+		passport.authenticate('jwt'), accessControlMiddleware([ 'admin' ]),
 		function* deleteUserRoute() {
 			yield deleteUser(this.params.id);
 
 			this.response.status = 201;
-			this.response.message = {
+			this.response.body = {
 				type: 'success',
 				message: 'User successfully deleted.'
 			};
