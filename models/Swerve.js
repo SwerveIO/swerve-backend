@@ -24,7 +24,9 @@ export function createSwerve(user, swerve) {
 				{
 					swerve: swerve.emojis,
 					userId: user.id,
-					date: new Date().toJSON()
+					date: new Date().toJSON(),
+					reports: [],
+					nsfw: false
 				}
 			]
 		};
@@ -65,6 +67,20 @@ export function fetchSwerveById(id) {
 	return co(function* coRoutine() {
 		return yield runQuery(
 			r.db('swerve').table('swerves').get(id)
+		);
+	});
+}
+
+export function reportSwerve(user, swerve, reason) {
+	return co(function* coRoutine() {
+		return yield runQuery(
+			r.db('swerve').table('swerves').get(swerve)
+				.update({
+					reports: r.row('reports').append({
+						userId: user,
+						reason
+					});
+				})
 		);
 	});
 }

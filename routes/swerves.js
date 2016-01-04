@@ -1,6 +1,6 @@
 "use strict";
 import { passport } from '../auth';
-import { fetchMostRecentSwerves, createSwerve, swerveOnSwerve, fetchSwerveById } from '../models/Swerve';
+import { fetchMostRecentSwerves, createSwerve, swerveOnSwerve, fetchSwerveById, reportSwerve } from '../models/Swerve';
 
 export default function(routes) {
 	// Most recent Swerves.
@@ -53,6 +53,29 @@ export default function(routes) {
 		this.response.body = {
 			type: 'success',
 			message: 'Swerve successfully swerved. Stay chill.'
+		};
+	});
+
+	routes.post('/swerve/:swerveid/report',passport.authenticate('jwt'), function* (next) {
+		let swerve = yield fetchSwerveById(this.params.swerveid);
+
+		if(swerve === null || typeof swerve === 'undefined') {
+			this.response.status = 404;
+			this.response.body = {
+				type: 'failure',
+				message: 'That Swerve can not be swerved because that Swerve does not exist'
+			}
+			return;
+		}
+
+		let reason = this.request.body.reason;
+
+		yield reportSwerve(this.session.passport.user, swerve, reason);
+
+		this.response.status = 200;
+		this.response.body = {
+			type: 'success',
+			message: 'Swerve reported.'
 		};
 	});
 }
