@@ -4,11 +4,18 @@ import r from 'rethinkdb';
 import co from 'co';
 import runQuery, { runInsertQuery } from '../helpers/runQuery';
 
-export function fetchMostRecentSwerves() {
+export function fetchMostRecentSwerves(nsfw) {
 	return co(function* fetchMostRecentSwervesCoroutine() {
-		return yield runQuery(
-			r.db('swerve').table('swerves').orderBy({ index: r.desc('date') })
-		);
+		if(nsfw) {
+			return yield runQuery(
+				r.db('swerve').table('swerves').orderBy({ index: r.desc('date') })
+			);
+		} else {
+			return yield runQuery(
+				r.db('swerve').table('swerves').orderBy({ index: r.desc('date') })
+					.filter({ nsfw: false })
+			);
+		}
 	}, function failure(err) {
 		throw err;
 	});
@@ -81,6 +88,17 @@ export function reportSwerve(user, swerve, reason) {
 					userId: user,
 					reason
 				})
+			})
+		);
+	});
+}
+
+export function flagSwerveNSFW(swerve) {
+	return co(function* coRoutine() {
+		return yield runQuery(
+			r.db('swerve').table('swerves').get(swerve)
+			.update({
+				nsfw: true
 			})
 		);
 	});

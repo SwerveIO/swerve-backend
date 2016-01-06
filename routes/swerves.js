@@ -1,11 +1,25 @@
 "use strict";
 import { passport } from '../auth';
-import { fetchMostRecentSwerves, createSwerve, swerveOnSwerve, fetchSwerveById, reportSwerve } from '../models/Swerve';
+import {
+	fetchMostRecentSwerves,
+	createSwerve,
+	swerveOnSwerve,
+	fetchSwerveById,
+	reportSwerve,
+	flagSwerveNSFW
+} from '../models/Swerve';
 
 export default function(routes) {
 	// Most recent Swerves.
 	routes.get('/feed', passport.authenticate('jwt'), function* (next) {
-		let swerves = yield fetchMostRecentSwerves();
+		let swerves = yield fetchMostRecentSwerves(false);
+
+		this.response.status = 200;
+		this.response.body = swerves;
+	});
+
+	routes.get('/feed/nsfw', passport.authenticate('jwt'), function* (next) {
+		let swerves = yield fetchMostRecentSwerves(true);
 
 		this.response.status = 200;
 		this.response.body = swerves;
@@ -53,6 +67,27 @@ export default function(routes) {
 		this.response.body = {
 			type: 'success',
 			message: 'Swerve successfully swerved. Stay chill.'
+		};
+	});
+
+	routes.post('/swerve/:swerveid/nsfw', passport.authenticate('jwt'), function* (next) {
+		let swerve = yield fetchSwerveById(this.params.swerveid);
+
+		if(swerve === null || typeof swerve === 'undefined') {
+			this.response.status = 404;
+			this.response.body = {
+				type: 'failure',
+				message: 'That Swerve can not be swerved because that Swerve does not exist'
+			}
+			return;
+		}
+
+		yield flagSwerveNSFW(swerve.id);
+
+		this.response.status = 200;
+		this.response.body = {
+			type: 'success',
+			message: 'Swerve flagged as NSFW.'
 		};
 	});
 
