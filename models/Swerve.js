@@ -25,10 +25,11 @@ export function createSwerve(user, swerve) {
 					swerve: swerve.emojis,
 					userId: user.id,
 					date: new Date().toJSON(),
-					reports: [],
-					nsfw: false
 				}
-			]
+			],
+
+			reports: [],
+			nsfw: false
 		};
 
 		let createdSwerve = yield runInsertQuery(
@@ -75,12 +76,12 @@ export function reportSwerve(user, swerve, reason) {
 	return co(function* coRoutine() {
 		return yield runQuery(
 			r.db('swerve').table('swerves').get(swerve)
-				.update({
-					reports: r.row('reports').append({
-						userId: user,
-						reason
-					});
+			.update({
+				reports: r.row('reports').append({
+					userId: user,
+					reason
 				})
+			})
 		);
 	});
 }

@@ -56,7 +56,7 @@ export default function(routes) {
 		};
 	});
 
-	routes.post('/swerve/:swerveid/report',passport.authenticate('jwt'), function* (next) {
+	routes.post('/swerve/:swerveid/report', passport.authenticate('jwt'), function* (next) {
 		let swerve = yield fetchSwerveById(this.params.swerveid);
 
 		if(swerve === null || typeof swerve === 'undefined') {
@@ -70,7 +70,7 @@ export default function(routes) {
 
 		let reason = this.request.body.reason;
 
-		yield reportSwerve(this.session.passport.user, swerve, reason);
+		yield reportSwerve(this.session.passport.user.id, swerve.id, reason);
 
 		this.response.status = 200;
 		this.response.body = {
